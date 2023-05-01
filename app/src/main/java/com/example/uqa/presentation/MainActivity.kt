@@ -33,4 +33,8 @@ class MainActivity : AppCompatActivity() {
         val navController = this.findNavController(R.id.fragmentContainer)
         return navController.navigateUp()
     }
+
+    companion object{
+        val TAG = "Chura"
+    }
 }

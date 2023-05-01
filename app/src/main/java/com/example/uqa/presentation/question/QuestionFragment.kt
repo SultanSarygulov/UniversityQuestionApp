@@ -5,11 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.navigation.fragment.navArgs
 import com.example.uqa.R
 import com.example.uqa.data.Answer
-import com.example.uqa.databinding.FragmentHomeBinding
 import com.example.uqa.databinding.FragmentQuestionBinding
 
 
