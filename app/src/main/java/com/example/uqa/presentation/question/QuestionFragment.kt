@@ -20,10 +20,10 @@ class QuestionFragment : Fragment() {
     private val currentPost by lazy { args.currentPost }
 
     private val answersList = listOf(
-        Answer(0, "1", "Mongul Bek"),
-        Answer(1, "2", "EShlere"),
-        Answer(2, "3", "Bob"),
-        Answer(3, "4", "Sultan V"),
+        Answer(0, "No idea man", "Mongul Bek"),
+        Answer(1, "DM me", "EShlere"),
+        Answer(2, "Fuck you", "Bob"),
+        Answer(3, "He is in his office", "Sultan V"),
         Answer(4, "I'm Gay", "John Yag"),
     )
 

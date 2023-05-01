@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.uqa.R
 import com.example.uqa.databinding.ActivityMainBinding
 
@@ -22,6 +24,9 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
         navController =navHostFragment.navController
+
+        setupActionBarWithNavController(navController)
+        binding.bottomNavigationView.setupWithNavController(navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {
