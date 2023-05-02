@@ -10,5 +10,6 @@
 
     <color name="paletteBlack">#232849</color>
     <color name="gray">#AAAAAA</color>
+    <color name="mainBlue">#4983C7</color>
 
 </resources>

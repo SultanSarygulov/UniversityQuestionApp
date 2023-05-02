@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/askQuestionFragment"
-        android:name="com.example.uqa.presentation.AskQuestionFragment"
+        android:name="com.example.uqa.presentation.askQuestion.AskQuestionFragment"
         android:label="Задать вопрос"
         tools:layout="@layout/fragment_ask_question" />
 </navigation>
