@@ -5,12 +5,14 @@
       <map>
         <entry key="..\:/NeobisProjects/UQA/app/src/main/res/drawable/shape_cornered_button.xml" value="0.125" />
         <entry key="..\:/NeobisProjects/UQA/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
+        <entry key="..\:/NeobisProjects/UQA/app/src/main/res/layout/dialog_answering.xml" value="0.203125" />
         <entry key="..\:/NeobisProjects/UQA/app/src/main/res/layout/fragment_ask_question.xml" value="0.22" />
         <entry key="..\:/NeobisProjects/UQA/app/src/main/res/layout/fragment_home.xml" value="0.20416666666666666" />
-        <entry key="..\:/NeobisProjects/UQA/app/src/main/res/layout/fragment_question.xml" value="0.33" />
+        <entry key="..\:/NeobisProjects/UQA/app/src/main/res/layout/fragment_question.xml" value="0.2" />
         <entry key="..\:/NeobisProjects/UQA/app/src/main/res/layout/item_answer.xml" value="0.33" />
         <entry key="..\:/NeobisProjects/UQA/app/src/main/res/layout/item_post.xml" value="0.5" />
         <entry key="..\:/NeobisProjects/UQA/app/src/main/res/menu/bottom_nav_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/NeobisProjects/UQA/app/src/main/res/menu/bottom_nav_menu_comment.xml" value="0.203125" />
       </map>
     </option>
   </component>

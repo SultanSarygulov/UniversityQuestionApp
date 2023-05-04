@@ -3,6 +3,7 @@ package com.example.uqa.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -27,6 +28,16 @@ class MainActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(navController)
         binding.bottomNavigationView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener{_, nd: NavDestination, _ ->
+            if (nd.id == R.id.questionFragment){
+                binding.bottomNavigationView.menu.findItem(R.id.comment).isVisible
+                !binding.bottomNavigationView.menu.findItem(R.id.askQuestionFragment).isVisible
+            } else {
+                !binding.bottomNavigationView.menu.findItem(R.id.comment).isVisible
+                binding.bottomNavigationView.menu.findItem(R.id.askQuestionFragment).isVisible
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

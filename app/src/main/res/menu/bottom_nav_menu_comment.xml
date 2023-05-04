@@ -7,13 +7,8 @@
         android:icon="@drawable/ic_question"/>
 
     <item
-        android:id="@+id/askQuestionFragment"
-        android:title="Ask"
-        android:icon="@drawable/ic_add"/>
-
-    <item
         android:id="@+id/comment"
-        android:title="Comment"
+        android:title="Ask"
         android:icon="@drawable/ic_comment"
         android:visible="false"/>
 

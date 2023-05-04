@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.uqa.data.Answer
 import com.example.uqa.data.Post
 
-@Database(entities = [Post::class], version = 1, exportSchema = false)
+@Database(entities = [Post::class, Answer::class], version = 2, exportSchema = false)
 abstract class UQADatabase: RoomDatabase() {
 
     abstract fun postsDao(): PostsDao
@@ -26,7 +27,8 @@ abstract class UQADatabase: RoomDatabase() {
                     context.applicationContext,
                     UQADatabase::class.java,
                     "uqa_database"
-                ).build()
+                    ).fallbackToDestructiveMigration()
+                    .build()
 
                 INSTANCE = instance
                 return instance

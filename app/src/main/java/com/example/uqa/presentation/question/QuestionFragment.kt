@@ -1,29 +1,27 @@
 package com.example.uqa.presentation.question
 
+import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.example.uqa.R
 import com.example.uqa.data.Answer
+import com.example.uqa.databinding.DialogAnsweringBinding
 import com.example.uqa.databinding.FragmentQuestionBinding
+import com.example.uqa.presentation.home.HomeViewModel
 
 
 class QuestionFragment : Fragment() {
 
     private lateinit var binding: FragmentQuestionBinding
+    private lateinit var viewModel: QuestionViewModel
     private val args: QuestionFragmentArgs  by navArgs()
     private val currentPost by lazy { args.currentPost }
-
-    private val answersList = listOf(
-        Answer(0, "No idea man", "Mongul Bek"),
-        Answer(1, "DM me", "EShlere"),
-        Answer(2, "Fuck you", "Bob"),
-        Answer(3, "He is in his office", "Sultan V"),
-        Answer(4, "I'm Gay", "John Yag"),
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +34,11 @@ class QuestionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel = ViewModelProvider(this)[QuestionViewModel::class.java]
+
         setTexts()
+
+
 
         binding.questionUpvoteButton.setOnClickListener {
             currentPost.upvotes += 1
@@ -51,12 +53,19 @@ class QuestionFragment : Fragment() {
         }
 
         setAdapter()
+
+        binding.commentButton.setOnClickListener {
+            setDialog()
+        }
     }
 
     private fun setAdapter() {
         val answerAdapter = AnswerAdapter()
         binding.answersList.adapter = answerAdapter
-        answerAdapter.submitList(answersList)
+        viewModel.answersList.observe(viewLifecycleOwner){list ->
+            answerAdapter.submitList(list)
+        }
+
     }
 
     private fun setTexts() {
@@ -66,9 +75,38 @@ class QuestionFragment : Fragment() {
         binding.questionUpvoteNum.text = currentPost.upvotes.toString()
         binding.questionDownvoteNum.text = currentPost.downvotes.toString()
 
-        binding.questionAnswers.text = resources.getString(
-            R.string.answers_txt,
-            answersList.size
-        )
+        viewModel.answersList.observe(viewLifecycleOwner){list ->
+            binding.questionAnswers.text = resources.getString(
+                R.string.answers_txt,
+                list.size
+            )
+        }
+
+    }
+
+    private fun setDialog(){
+        val dialog = Dialog(requireContext())
+        val dialogBinding = DialogAnsweringBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialogBinding.answerButton.setOnClickListener {
+            Toast.makeText(requireContext(), "Posted", Toast.LENGTH_SHORT).show()
+
+            val newAnswer = Answer(
+                0,
+                dialogBinding.inputAnswer.text.toString(),
+                dialogBinding.inputAnswerAuthor.text.toString(),
+            )
+
+            viewModel.answersList.observe(viewLifecycleOwner){list ->
+                list.add(newAnswer)
+
+            }
+            setTexts()
+
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }
