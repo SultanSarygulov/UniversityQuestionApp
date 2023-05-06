@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="131dp"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         app:cardCornerRadius="18dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,10 +62,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="34dp"
+            android:layout_marginTop="52dp"
             android:layout_marginBottom="19dp"
             android:background="?attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/question_author"
             app:srcCompat="@drawable/ic_upvote" />
 
         <ImageView

@@ -16,7 +16,7 @@
         android:ems="10"
         android:gravity="start"
         android:hint="Type your answer here..."
-        android:inputType="textPersonName"
+        android:inputType="text"
         android:padding="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

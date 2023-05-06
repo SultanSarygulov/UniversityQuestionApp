@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(application: Application): AndroidViewModel(application) {
 
-    var _postsList = MutableLiveData<List<Post>>()
+    private var _postsList = MutableLiveData<List<Post>>()
     val postsList: LiveData<List<Post>>
         get() = _postsList
 

@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class Answer(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
+    val postId: Long,
     val text: String,
     val author: String
 )

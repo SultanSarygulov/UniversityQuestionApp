@@ -2,6 +2,7 @@ package com.example.uqa.presentation.question
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.example.uqa.R
 import com.example.uqa.data.Answer
 import com.example.uqa.databinding.DialogAnsweringBinding
 import com.example.uqa.databinding.FragmentQuestionBinding
+import com.example.uqa.presentation.MainActivity.Companion.TAG
 import com.example.uqa.presentation.home.HomeViewModel
 
 
@@ -35,10 +37,9 @@ class QuestionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this)[QuestionViewModel::class.java]
+        viewModel.getAnswers(currentPost.id)
 
         setTexts()
-
-
 
         binding.questionUpvoteButton.setOnClickListener {
             currentPost.upvotes += 1
@@ -63,6 +64,7 @@ class QuestionFragment : Fragment() {
         val answerAdapter = AnswerAdapter()
         binding.answersList.adapter = answerAdapter
         viewModel.answersList.observe(viewLifecycleOwner){list ->
+            Log.d(TAG, "setAdapter: ${list}")
             answerAdapter.submitList(list)
         }
 
@@ -94,15 +96,12 @@ class QuestionFragment : Fragment() {
 
             val newAnswer = Answer(
                 0,
+                currentPost.id,
                 dialogBinding.inputAnswer.text.toString(),
                 dialogBinding.inputAnswerAuthor.text.toString(),
             )
 
-            viewModel.answersList.observe(viewLifecycleOwner){list ->
-                list.add(newAnswer)
-
-            }
-            setTexts()
+            viewModel.addAnswer(newAnswer)
 
             dialog.dismiss()
         }
