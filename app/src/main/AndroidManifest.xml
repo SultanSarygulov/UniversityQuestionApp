@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.WelcomeActivity"
+            android:name=".presentation.welcome.WelcomeActivity"
             android:exported="false"
             android:label="@string/title_activity_welcome"
             android:theme="@style/Theme.UQA.NoActionBar" />
