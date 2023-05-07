@@ -5,16 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.uqa.data.Post
 import com.example.uqa.databinding.FragmentHomeBinding
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
+    private lateinit var postAdapter: PostAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,14 +34,9 @@ class HomeFragment : Fragment() {
         viewModel.getPostsList()
 
         setAdapter()
-//
-//        binding.questionButton.setOnClickListener {
-//            findNavController().navigate(R.id.action_homeFragment_to_questionFragment)
-//        }
 
-//        binding.askButton.setOnClickListener {
-//            findNavController().navigate(R.id.action_homeFragment_to_askQuestionFragment)
-//        }
+        binding.searchView.setOnQueryTextListener(this)
+
     }
 
     private fun getPosts() {
@@ -59,10 +56,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun setAdapter() {
-        val postAdapter = PostAdapter()
+        postAdapter = PostAdapter()
         binding.mainCarousel.adapter = postAdapter
         viewModel.postsList.observe(viewLifecycleOwner){postsList ->
-            postAdapter.submitList(postsList)
+            postAdapter.modifyList(postsList)
         }
 
 
@@ -71,5 +68,14 @@ class HomeFragment : Fragment() {
             val action = HomeFragmentDirections.actionHomeFragmentToQuestionFragment(post)
             findNavController().navigate(action)
         }
+    }
+
+    override fun onQueryTextSubmit(p0: String?): Boolean {
+        return false
+    }
+
+    override fun onQueryTextChange(query: String): Boolean {
+        postAdapter.filter(query)
+        return true
     }
 }

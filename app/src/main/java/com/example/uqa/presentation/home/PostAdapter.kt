@@ -1,5 +1,6 @@
 package com.example.uqa.presentation.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.uqa.R
 import com.example.uqa.data.Post
 import com.example.uqa.databinding.ItemPostBinding
+import com.example.uqa.presentation.MainActivity.Companion.TAG
+import java.util.*
 
 class PostAdapter: ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffUtil()) {
+
+    var unfilteredList = listOf<Post>()
 
     var onPostClockListener: ((Post) -> Unit)? = null
 
@@ -59,6 +64,26 @@ class PostAdapter: ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffUtil())
             return oldItem == newItem
         }
 
+    }
+
+    fun modifyList(list: List<Post>){
+        unfilteredList = list
+        submitList(list)
+    }
+
+    fun filter(query: CharSequence){
+        val list = mutableListOf<Post>()
+
+        if (!query.isNullOrEmpty()){
+            list.addAll(unfilteredList.filter {
+                it.title.lowercase(Locale.getDefault()).contains(query.toString().lowercase(Locale.getDefault()))
+            })
+        } else {
+            list.addAll(unfilteredList)
+        }
+        Log.d(TAG, "filter: ${list}")
+
+        submitList(list)
     }
 
 }

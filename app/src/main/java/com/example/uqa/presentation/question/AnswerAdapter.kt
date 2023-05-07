@@ -18,6 +18,9 @@ class AnswerAdapter: ListAdapter<Answer, AnswerAdapter.AnswerViewHolder>(AnswerD
         fun bind(answer: Answer) = with(binding){
             binding.answerText.text = answer.text
             binding.answerAuthor.text = answer.author
+
+//            val adapter = AnswerAdapter()
+//            adapter.submitList()
         }
     }
 
