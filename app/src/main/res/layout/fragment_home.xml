@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F6F5F5"
     tools:context=".presentation.home.HomeFragment">
 
     <androidx.appcompat.widget.SearchView
@@ -16,6 +17,8 @@
         app:iconifiedByDefault="false"
         app:queryBackground="@null"
         app:queryHint="Search"
+        android:background="@drawable/shape_cornered_button"
+        android:backgroundTint="@color/white"
         android:cropToPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

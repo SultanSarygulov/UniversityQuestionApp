@@ -56,7 +56,9 @@ class AskQuestionFragment : Fragment() {
             binding.inputName.text.toString(),
             "02/05/2023",
             0,
-            0
+            0,
+            isUpvoted = false,
+            isDownvoted = false
         )
 
         viewModel.addPost(newPost)

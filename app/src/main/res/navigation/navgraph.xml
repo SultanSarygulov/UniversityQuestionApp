@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.uqa.presentation.home.HomeFragment"
-        android:label="Главная"
+        android:label="Home"
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_questionFragment"
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/questionFragment"
         android:name="com.example.uqa.presentation.question.QuestionFragment"
-        android:label="Вопрос"
+        android:label="Question"
         tools:layout="@layout/fragment_question">
         <argument
             android:name="currentPost"
@@ -29,6 +29,6 @@
     <fragment
         android:id="@+id/askQuestionFragment"
         android:name="com.example.uqa.presentation.askQuestion.AskQuestionFragment"
-        android:label="Задать вопрос"
+        android:label="Ask Question"
         tools:layout="@layout/fragment_ask_question" />
 </navigation>

@@ -1,6 +1,8 @@
 package com.example.uqa.presentation.question
 
 import android.app.Dialog
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.example.uqa.R
@@ -24,6 +28,9 @@ class QuestionFragment : Fragment() {
     private lateinit var viewModel: QuestionViewModel
     private val args: QuestionFragmentArgs  by navArgs()
     private val currentPost by lazy { args.currentPost }
+
+    private lateinit var isUpvotedLiveData: MutableLiveData<Boolean>
+    private lateinit var isDownvotedLiveData: MutableLiveData<Boolean>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,13 +49,54 @@ class QuestionFragment : Fragment() {
         setTexts()
 
         binding.questionUpvoteButton.setOnClickListener {
-            currentPost.upvotes += 1
+
+            currentPost.isUpvoted = !currentPost.isUpvoted
+
+            if (currentPost.isUpvoted) {
+                currentPost.upvotes += 1
+
+                if (currentPost.isDownvoted){
+                    currentPost.isDownvoted = false
+                    currentPost.downvotes -= 1
+                    binding.questionDownvoteButton.setColorFilter(Color.parseColor("#C74949"))
+                    binding.questionDownvoteNum.setTextColor(resources.getColor(R.color.black))
+                }
+
+                binding.questionUpvoteButton.setColorFilter(Color.parseColor("#7fbaff"))
+                binding.questionUpvoteNum.setTextColor(Color.parseColor("#7fbaff"))
+            } else {
+                currentPost.upvotes -= 1
+                binding.questionUpvoteButton.setColorFilter(Color.parseColor("#4983C7"))
+                binding.questionUpvoteNum.setTextColor(resources.getColor(R.color.black))
+            }
+
 
             setTexts()
         }
 
         binding.questionDownvoteButton.setOnClickListener {
-            currentPost.downvotes += 1
+
+            currentPost.isDownvoted = !currentPost.isDownvoted
+
+            if (currentPost.isDownvoted) {
+                currentPost.downvotes += 1
+
+                if (currentPost.isUpvoted){
+                    currentPost.isUpvoted = false
+                    currentPost.upvotes -= 1
+                    binding.questionUpvoteButton.setColorFilter(Color.parseColor("#4983C7"))
+                    binding.questionUpvoteNum.setTextColor(resources.getColor(R.color.black))
+                }
+
+                binding.questionDownvoteButton.setColorFilter(Color.parseColor("#ff8989"))
+                binding.questionDownvoteNum.setTextColor(Color.parseColor("#ff8989"))
+            } else {
+                currentPost.downvotes -= 1
+                binding.questionDownvoteButton.setColorFilter(Color.parseColor("#C74949"))
+                binding.questionDownvoteNum.setTextColor(resources.getColor(R.color.black))
+            }
+
+
 
             setTexts()
         }
@@ -84,6 +132,8 @@ class QuestionFragment : Fragment() {
             )
         }
 
+
+
     }
 
     private fun setDialog(){
@@ -107,5 +157,9 @@ class QuestionFragment : Fragment() {
         }
 
         dialog.show()
+    }
+
+    fun pxToDp(px: Int): Int {
+        return (px / context?.resources?.displayMetrics?.density!!).toInt()
     }
 }

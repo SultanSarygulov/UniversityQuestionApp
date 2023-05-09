@@ -59,12 +59,15 @@
 
         <ImageView
             android:id="@+id/question_upvote_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="34dp"
             android:layout_marginTop="52dp"
             android:layout_marginBottom="19dp"
+            android:adjustViewBounds="false"
             android:background="?attr/selectableItemBackground"
+            android:backgroundTintMode="add"
+            android:cropToPadding="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/question_author"
@@ -72,8 +75,8 @@
 
         <ImageView
             android:id="@+id/question_downvote_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="11dp"
             android:background="?attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="@+id/question_upvote_button"

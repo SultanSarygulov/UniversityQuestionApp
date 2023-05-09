@@ -1,6 +1,7 @@
 package com.example.uqa.data
 
 import android.os.Parcelable
+import androidx.lifecycle.LiveData
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
@@ -14,5 +15,7 @@ data class Post(
     val author: String,
     val date: String,
     var upvotes: Int,
-    var downvotes: Int
+    var downvotes: Int,
+    var isUpvoted: Boolean,
+    var isDownvoted: Boolean,
 ): Parcelable
