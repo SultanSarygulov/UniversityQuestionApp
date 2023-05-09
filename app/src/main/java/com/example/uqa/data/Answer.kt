@@ -8,6 +8,7 @@ data class Answer(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val postId: Long,
+    val replyId: Long? = null,
     val text: String,
     val author: String
 )

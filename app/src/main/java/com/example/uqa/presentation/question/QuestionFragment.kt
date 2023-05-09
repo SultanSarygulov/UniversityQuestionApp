@@ -27,7 +27,7 @@ class QuestionFragment : Fragment() {
     private lateinit var binding: FragmentQuestionBinding
     private lateinit var viewModel: QuestionViewModel
     private val args: QuestionFragmentArgs  by navArgs()
-    private val currentPost by lazy { args.currentPost }
+    private val question by lazy { args.currentPost }
 
     private lateinit var isUpvotedLiveData: MutableLiveData<Boolean>
     private lateinit var isDownvotedLiveData: MutableLiveData<Boolean>
@@ -44,20 +44,20 @@ class QuestionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this)[QuestionViewModel::class.java]
-        viewModel.getAnswers(currentPost.id)
+        viewModel.getAnswers(question.id)
 
         setTexts()
 
         binding.questionUpvoteButton.setOnClickListener {
 
-            currentPost.isUpvoted = !currentPost.isUpvoted
+            question.isUpvoted = !question.isUpvoted
 
-            if (currentPost.isUpvoted) {
-                currentPost.upvotes += 1
+            if (question.isUpvoted) {
+                question.upvotes += 1
 
-                if (currentPost.isDownvoted){
-                    currentPost.isDownvoted = false
-                    currentPost.downvotes -= 1
+                if (question.isDownvoted){
+                    question.isDownvoted = false
+                    question.downvotes -= 1
                     binding.questionDownvoteButton.setColorFilter(Color.parseColor("#C74949"))
                     binding.questionDownvoteNum.setTextColor(resources.getColor(R.color.black))
                 }
@@ -65,7 +65,7 @@ class QuestionFragment : Fragment() {
                 binding.questionUpvoteButton.setColorFilter(Color.parseColor("#7fbaff"))
                 binding.questionUpvoteNum.setTextColor(Color.parseColor("#7fbaff"))
             } else {
-                currentPost.upvotes -= 1
+                question.upvotes -= 1
                 binding.questionUpvoteButton.setColorFilter(Color.parseColor("#4983C7"))
                 binding.questionUpvoteNum.setTextColor(resources.getColor(R.color.black))
             }
@@ -76,14 +76,14 @@ class QuestionFragment : Fragment() {
 
         binding.questionDownvoteButton.setOnClickListener {
 
-            currentPost.isDownvoted = !currentPost.isDownvoted
+            question.isDownvoted = !question.isDownvoted
 
-            if (currentPost.isDownvoted) {
-                currentPost.downvotes += 1
+            if (question.isDownvoted) {
+                question.downvotes += 1
 
-                if (currentPost.isUpvoted){
-                    currentPost.isUpvoted = false
-                    currentPost.upvotes -= 1
+                if (question.isUpvoted){
+                    question.isUpvoted = false
+                    question.upvotes -= 1
                     binding.questionUpvoteButton.setColorFilter(Color.parseColor("#4983C7"))
                     binding.questionUpvoteNum.setTextColor(resources.getColor(R.color.black))
                 }
@@ -91,7 +91,7 @@ class QuestionFragment : Fragment() {
                 binding.questionDownvoteButton.setColorFilter(Color.parseColor("#ff8989"))
                 binding.questionDownvoteNum.setTextColor(Color.parseColor("#ff8989"))
             } else {
-                currentPost.downvotes -= 1
+                question.downvotes -= 1
                 binding.questionDownvoteButton.setColorFilter(Color.parseColor("#C74949"))
                 binding.questionDownvoteNum.setTextColor(resources.getColor(R.color.black))
             }
@@ -104,7 +104,7 @@ class QuestionFragment : Fragment() {
         setAdapter()
 
         binding.commentButton.setOnClickListener {
-            setDialog()
+            setDialog(null)
         }
     }
 
@@ -116,14 +116,16 @@ class QuestionFragment : Fragment() {
             answerAdapter.submitList(list)
         }
 
+        answerAdapter.setRepliesList(listOf(Answer(21, question.id, 2, "Hello World", "Sultan")))
+
     }
 
     private fun setTexts() {
-        binding.questionTitle.text = currentPost.title
-        binding.questionAuthor.text = currentPost.author
-        binding.questionDate.text = currentPost.date
-        binding.questionUpvoteNum.text = currentPost.upvotes.toString()
-        binding.questionDownvoteNum.text = currentPost.downvotes.toString()
+        binding.questionTitle.text = question.title
+        binding.questionAuthor.text = question.author
+        binding.questionDate.text = question.date
+        binding.questionUpvoteNum.text = question.upvotes.toString()
+        binding.questionDownvoteNum.text = question.downvotes.toString()
 
         viewModel.answersList.observe(viewLifecycleOwner){list ->
             binding.questionAnswers.text = resources.getString(
@@ -136,7 +138,7 @@ class QuestionFragment : Fragment() {
 
     }
 
-    private fun setDialog(){
+    private fun setDialog(replyId: Long?){
         val dialog = Dialog(requireContext())
         val dialogBinding = DialogAnsweringBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
@@ -146,7 +148,8 @@ class QuestionFragment : Fragment() {
 
             val newAnswer = Answer(
                 0,
-                currentPost.id,
+                question.id,
+                replyId,
                 dialogBinding.inputAnswer.text.toString(),
                 dialogBinding.inputAnswerAuthor.text.toString(),
             )
@@ -157,9 +160,5 @@ class QuestionFragment : Fragment() {
         }
 
         dialog.show()
-    }
-
-    fun pxToDp(px: Int): Int {
-        return (px / context?.resources?.displayMetrics?.density!!).toInt()
     }
 }
