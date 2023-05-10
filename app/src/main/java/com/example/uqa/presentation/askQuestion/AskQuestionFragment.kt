@@ -13,6 +13,8 @@ import com.example.uqa.data.Post
 import com.example.uqa.databinding.FragmentAskQuestionBinding
 import com.example.uqa.databinding.FragmentQuestionBinding
 import com.example.uqa.presentation.home.HomeViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class AskQuestionFragment : Fragment() {
@@ -54,7 +56,7 @@ class AskQuestionFragment : Fragment() {
             0,
             binding.inputPostTextET.text.toString(),
             binding.inputName.text.toString(),
-            "02/05/2023",
+            getDate(),
             0,
             0,
             isUpvoted = false,
@@ -66,5 +68,13 @@ class AskQuestionFragment : Fragment() {
         Toast.makeText(requireContext(), "Question successfully posted!", Toast.LENGTH_SHORT).show()
         findNavController().navigateUp()
 
+    }
+
+    private fun getDate(): String {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val todayDate = Date()
+        val formattedDate = dateFormat.format(todayDate)
+
+        return formattedDate
     }
 }

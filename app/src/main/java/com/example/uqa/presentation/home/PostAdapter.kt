@@ -1,5 +1,6 @@
 package com.example.uqa.presentation.home
 
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -42,6 +43,56 @@ class PostAdapter: ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffUtil())
 
             binding.itemPost.setOnClickListener {
                 onPostClockListener?.invoke(post)
+            }
+
+            upvoteButton.setOnClickListener {
+                post.isUpvoted = !post.isUpvoted
+
+                if (post.isUpvoted) {
+                    post.upvotes += 1
+
+                    if (post.isDownvoted){
+                        post.isDownvoted = false
+                        post.downvotes -= 1
+                        binding.downvoteButton.setColorFilter(Color.parseColor("#C74949"))
+                        binding.downvoteNum.setTextColor(Color.parseColor("#000000"))
+                    }
+
+                    binding.upvoteButton.setColorFilter(Color.parseColor("#7fbaff"))
+                    binding.upvoteNum.setTextColor(Color.parseColor("#7fbaff"))
+                } else {
+                    post.upvotes -= 1
+                    binding.upvoteButton.setColorFilter(Color.parseColor("#4983C7"))
+                    binding.upvoteNum.setTextColor(Color.parseColor("#000000"))
+                }
+
+                binding.upvoteNum.text = post.upvotes.toString()
+                binding.downvoteNum.text = post.downvotes.toString()
+            }
+
+            binding.downvoteButton.setOnClickListener {
+                post.isDownvoted = !post.isDownvoted
+
+                if (post.isDownvoted) {
+                    post.downvotes += 1
+
+                    if (post.isUpvoted){
+                        post.isUpvoted = false
+                        post.upvotes -= 1
+                        binding.upvoteButton.setColorFilter(Color.parseColor("#4983C7"))
+                        binding.upvoteNum.setTextColor(Color.parseColor("#000000"))
+                    }
+
+                    binding.downvoteButton.setColorFilter(Color.parseColor("#ff8989"))
+                    binding.downvoteNum.setTextColor(Color.parseColor("#ff8989"))
+                } else {
+                    post.downvotes -= 1
+                    binding.downvoteButton.setColorFilter(Color.parseColor("#C74949"))
+                    binding.downvoteNum.setTextColor(Color.parseColor("#000000"))
+                }
+
+                binding.upvoteNum.text = post.upvotes.toString()
+                binding.downvoteNum.text = post.downvotes.toString()
             }
         }
     }
