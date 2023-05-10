@@ -1,5 +1,6 @@
 package com.example.uqa.presentation.question
 
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -47,6 +48,59 @@ class AnswerAdapter: ListAdapter<Answer, AnswerAdapter.AnswerViewHolder>(AnswerD
                 onPostClickListener?.invoke(answer)
             }
 
+            binding.answerUpvotes.text = answer.upvotes.toString()
+
+            binding.answerDownvotes.text = answer.downvotes.toString()
+
+            binding.answerUpvoteButton.setOnClickListener {
+                answer.isUpvoted = !answer.isUpvoted
+
+                if (answer.isUpvoted) {
+                    answer.upvotes += 1
+
+                    if (answer.isDownvoted){
+                        answer.isDownvoted = false
+                        answer.downvotes -= 1
+                        binding.answerDownvoteButton.setColorFilter(Color.parseColor("#C74949"))
+                        binding.answerDownvotes.setTextColor(Color.parseColor("#000000"))
+                    }
+
+                    binding.answerUpvoteButton.setColorFilter(Color.parseColor("#7fbaff"))
+                    binding.answerUpvotes.setTextColor(Color.parseColor("#7fbaff"))
+                } else {
+                    answer.upvotes -= 1
+                    binding.answerUpvoteButton.setColorFilter(Color.parseColor("#4983C7"))
+                    binding.answerUpvotes.setTextColor(Color.parseColor("#000000"))
+                }
+
+                binding.answerUpvotes.text = answer.upvotes.toString()
+                binding.answerDownvotes.text = answer.downvotes.toString()
+            }
+
+            binding.answerDownvoteButton.setOnClickListener {
+                answer.isDownvoted = !answer.isDownvoted
+
+                if (answer.isDownvoted) {
+                    answer.downvotes += 1
+
+                    if (answer.isUpvoted){
+                        answer.isUpvoted = false
+                        answer.upvotes -= 1
+                        binding.answerUpvoteButton.setColorFilter(Color.parseColor("#4983C7"))
+                        binding.answerUpvotes.setTextColor(Color.parseColor("#000000"))
+                    }
+
+                    binding.answerDownvoteButton.setColorFilter(Color.parseColor("#ff8989"))
+                    binding.answerDownvotes.setTextColor(Color.parseColor("#ff8989"))
+                } else {
+                    answer.downvotes -= 1
+                    binding.answerDownvoteButton.setColorFilter(Color.parseColor("#C74949"))
+                    binding.answerDownvotes.setTextColor(Color.parseColor("#000000"))
+                }
+
+                binding.answerUpvotes.text = answer.upvotes.toString()
+                binding.answerDownvotes.text = answer.downvotes.toString()
+            }
         }
     }
 

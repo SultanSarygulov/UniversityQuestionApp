@@ -10,5 +10,9 @@ data class Answer(
     val postId: Long,
     val replyId: Long? = null,
     val text: String,
-    val author: String
+    val author: String,
+    var upvotes: Int,
+    var downvotes: Int,
+    var isUpvoted: Boolean,
+    var isDownvoted: Boolean,
 )

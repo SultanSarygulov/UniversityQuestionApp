@@ -161,6 +161,10 @@ class QuestionFragment : Fragment() {
                 replyId,
                 dialogBinding.inputAnswer.text.toString(),
                 dialogBinding.inputAnswerAuthor.text.toString(),
+                0,
+                0,
+                false,
+                false
             )
 
             viewModel.addAnswer(newAnswer)
