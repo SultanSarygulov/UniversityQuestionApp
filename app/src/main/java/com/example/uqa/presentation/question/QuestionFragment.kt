@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.uqa.R
 import com.example.uqa.data.Answer
@@ -28,9 +29,6 @@ class QuestionFragment : Fragment() {
     private lateinit var viewModel: QuestionViewModel
     private val args: QuestionFragmentArgs  by navArgs()
     private val question by lazy { args.currentPost }
-
-    private lateinit var isUpvotedLiveData: MutableLiveData<Boolean>
-    private lateinit var isDownvotedLiveData: MutableLiveData<Boolean>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -112,11 +110,21 @@ class QuestionFragment : Fragment() {
         val answerAdapter = AnswerAdapter()
         binding.answersList.adapter = answerAdapter
         viewModel.answersList.observe(viewLifecycleOwner){list ->
-            Log.d(TAG, "setAdapter: ${list}")
+            Log.d(TAG, "answersList: ${list}")
             answerAdapter.submitList(list)
         }
 
-        answerAdapter.setRepliesList(listOf(Answer(21, question.id, 2, "Hello World", "Sultan")))
+        viewModel.repliesList.observe(viewLifecycleOwner){list ->
+            Log.d(TAG, "repliesList: ${list}")
+            answerAdapter.setRepliesList(list)
+        }
+
+        answerAdapter.onPostClickListener = {
+//            Log.d(TAG, "onPostClickListener: ${it.id}")
+            setDialog(it.id)
+        }
+
+
 
     }
 
@@ -146,6 +154,7 @@ class QuestionFragment : Fragment() {
         dialogBinding.answerButton.setOnClickListener {
             Toast.makeText(requireContext(), "Posted", Toast.LENGTH_SHORT).show()
 
+            Log.d(TAG, "setDialog: ${replyId}")
             val newAnswer = Answer(
                 0,
                 question.id,

@@ -25,10 +25,18 @@
         <argument
             android:name="currentPost"
             app:argType="com.example.uqa.data.Post" />
+        <action
+            android:id="@+id/action_questionFragment_to_blankFragment"
+            app:destination="@id/blankFragment" />
     </fragment>
     <fragment
         android:id="@+id/askQuestionFragment"
         android:name="com.example.uqa.presentation.askQuestion.AskQuestionFragment"
         android:label="Ask Question"
         tools:layout="@layout/fragment_ask_question" />
+    <fragment
+        android:id="@+id/blankFragment"
+        android:name="com.example.uqa.presentation.question.BlankFragment"
+        android:label="fragment_blank"
+        tools:layout="@layout/fragment_blank" />
 </navigation>

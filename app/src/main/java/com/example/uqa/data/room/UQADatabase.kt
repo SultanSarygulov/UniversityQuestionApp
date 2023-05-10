@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.uqa.data.Answer
 import com.example.uqa.data.Post
 
-@Database(entities = [Post::class, Answer::class], version = 5, exportSchema = false)
+@Database(entities = [Post::class, Answer::class], version =6, exportSchema = false)
 abstract class UQADatabase: RoomDatabase() {
 
     abstract fun postsDao(): PostsDao

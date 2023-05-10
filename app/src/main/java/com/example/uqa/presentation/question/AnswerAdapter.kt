@@ -1,5 +1,6 @@
 package com.example.uqa.presentation.question
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.uqa.R
 import com.example.uqa.data.Answer
 import com.example.uqa.databinding.ItemAnswerBinding
+import com.example.uqa.presentation.MainActivity.Companion.TAG
 
 class AnswerAdapter: ListAdapter<Answer, AnswerAdapter.AnswerViewHolder>(AnswerDiffUtil()) {
+
+    var onPostClickListener: ((Answer) -> Unit)? = null
 
     private var repliesList = mutableListOf<Answer>()
     fun setRepliesList(replies: List<Answer>){
@@ -22,18 +26,25 @@ class AnswerAdapter: ListAdapter<Answer, AnswerAdapter.AnswerViewHolder>(AnswerD
     }
 
 
+    class AnswerViewHolder(
+        item: View,
+        private val repliesList: List<Answer>,
+        private val onPostClickListener: ((Answer) -> Unit)?
+    ): RecyclerView.ViewHolder(item){
 
-    class AnswerViewHolder(item: View, private val repliesList: List<Answer>): RecyclerView.ViewHolder(item){
-        val binding = ItemAnswerBinding.bind(item)
+        private val binding = ItemAnswerBinding.bind(item)
 
         fun bind(answer: Answer) = with(binding){
             binding.answerText.text = answer.text
             binding.answerAuthor.text = answer.author
 
-            if (answer.replyId == null){
-                val replyAdapter = AnswerAdapter()
-                binding.replyList.adapter = replyAdapter
-                replyAdapter.submitList(repliesList.filter { it.replyId == answer.id })
+            val replyAdapter = AnswerAdapter()
+            binding.replyList.adapter = replyAdapter
+            replyAdapter.submitList(repliesList.filter { it.replyId == answer.id })
+
+
+            binding.replyButton.setOnClickListener {
+                onPostClickListener?.invoke(answer)
             }
 
         }
@@ -42,11 +53,14 @@ class AnswerAdapter: ListAdapter<Answer, AnswerAdapter.AnswerViewHolder>(AnswerD
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnswerViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_answer, parent, false)
 
-        return AnswerViewHolder(view, repliesList)
+        return AnswerViewHolder(view, repliesList, onPostClickListener)
     }
 
     override fun onBindViewHolder(holder: AnswerViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val item = getItem(position)
+        Log.d(TAG, "onBindViewHolder: ${item}")
+        holder.bind(item)
+
     }
 
     class AnswerDiffUtil: DiffUtil.ItemCallback<Answer>(){
