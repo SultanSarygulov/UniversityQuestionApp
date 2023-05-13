@@ -1,6 +1,9 @@
 package com.example.uqa.presentation.home
 
+import android.app.Activity
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.uqa.data.Post
 import com.example.uqa.databinding.FragmentHomeBinding
+import com.example.uqa.presentation.MainActivity.Companion.PREFERENCE_KEY
+import com.example.uqa.presentation.MainActivity.Companion.TAG
 
 
 class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
@@ -29,13 +34,17 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 //        getPosts()
-        viewModel.getPostsList()
+
 
         setAdapter()
+        viewModel.getPostsList()
 
         binding.searchView.setOnQueryTextListener(this)
+
+
 
     }
 

@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -39,9 +41,15 @@ class AnswerAdapter: ListAdapter<Answer, AnswerAdapter.AnswerViewHolder>(AnswerD
             binding.answerText.text = answer.text
             binding.answerAuthor.text = answer.author
 
+            val repliesListLiveData= MutableLiveData<List<Answer>> ()
+            repliesListLiveData.postValue(repliesList)
+
             val replyAdapter = AnswerAdapter()
             binding.replyList.adapter = replyAdapter
-            replyAdapter.submitList(repliesList.filter { it.replyId == answer.id })
+            repliesListLiveData.observe(itemView.context as LifecycleOwner){ list ->
+                replyAdapter.submitList(list.filter { it.replyId == answer.id })
+            }
+
 
 
             binding.replyButton.setOnClickListener {

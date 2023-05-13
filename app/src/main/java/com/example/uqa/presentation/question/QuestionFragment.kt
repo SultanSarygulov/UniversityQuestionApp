@@ -29,6 +29,7 @@ class QuestionFragment : Fragment() {
     private lateinit var viewModel: QuestionViewModel
     private val args: QuestionFragmentArgs  by navArgs()
     private val question by lazy { args.currentPost }
+    private lateinit var answerAdapter: AnswerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -107,7 +108,7 @@ class QuestionFragment : Fragment() {
     }
 
     private fun setAdapter() {
-        val answerAdapter = AnswerAdapter()
+        answerAdapter = AnswerAdapter()
         binding.answersList.adapter = answerAdapter
         viewModel.answersList.observe(viewLifecycleOwner){list ->
             Log.d(TAG, "answersList: ${list}")
@@ -123,9 +124,6 @@ class QuestionFragment : Fragment() {
 //            Log.d(TAG, "onPostClickListener: ${it.id}")
             setDialog(it.id)
         }
-
-
-
     }
 
     private fun setTexts() {
@@ -141,9 +139,6 @@ class QuestionFragment : Fragment() {
                 list.size
             )
         }
-
-
-
     }
 
     private fun setDialog(replyId: Long?){
@@ -154,7 +149,7 @@ class QuestionFragment : Fragment() {
         dialogBinding.answerButton.setOnClickListener {
             Toast.makeText(requireContext(), "Posted", Toast.LENGTH_SHORT).show()
 
-            Log.d(TAG, "setDialog: ${replyId}")
+            Log.d(TAG, "setDialog: $replyId")
             val newAnswer = Answer(
                 0,
                 question.id,
