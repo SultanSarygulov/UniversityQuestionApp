@@ -59,7 +59,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
-
+    //Circle Indicator
+    implementation("com.tbuonomo:dotsindicator:4.3")
+    
     // Kotlin components
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
@@ -72,8 +74,7 @@ dependencies {
     implementation "androidx.room:room-ktx:2.4.3"
     androidTestImplementation "androidx.room:room-testing:2.4.3"
 
-    //Circle Indicator
-    implementation("com.tbuonomo:dotsindicator:4.3")
+
 
 
 }
