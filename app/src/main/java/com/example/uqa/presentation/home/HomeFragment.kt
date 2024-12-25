@@ -24,18 +24,19 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
     private lateinit var postAdapter: PostAdapter
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        val isFirstTime = sharedPref.getBoolean(PREFERENCE_KEY, true)
+        sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
 
+        val isFirstTime = sharedPreferences.getBoolean(PREFERENCE_KEY, true)
         if (isFirstTime) {
             Log.d(TAG, "HomeFragment: isFirstTime")
-            sharedPref.edit().putBoolean(PREFERENCE_KEY, false).apply()
+            sharedPreferences.edit().putBoolean(PREFERENCE_KEY, false).apply()
             val action = HomeFragmentDirections.actionHomeFragmentToLoginFragment()
             findNavController().navigate(action)
         }
@@ -46,7 +47,6 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
 
 

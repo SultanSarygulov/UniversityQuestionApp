@@ -76,6 +76,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         val TAG = "Chura"
-        val PREFERENCE_KEY = "First time12"
+        val PREFERENCE_KEY = "First time15"
+        val USERNAME = "Username"
     }
 }
