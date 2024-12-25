@@ -1,6 +1,7 @@
 package com.example.uqa.presentation.home
 
 import android.app.Activity
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.uqa.R
 import com.example.uqa.data.Post
 import com.example.uqa.databinding.FragmentHomeBinding
 import com.example.uqa.presentation.MainActivity.Companion.PREFERENCE_KEY
@@ -27,6 +29,17 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        val isFirstTime = sharedPref.getBoolean(PREFERENCE_KEY, true)
+
+        if (isFirstTime) {
+            Log.d(TAG, "HomeFragment: isFirstTime")
+            sharedPref.edit().putBoolean(PREFERENCE_KEY, false).apply()
+            val action = HomeFragmentDirections.actionHomeFragmentToLoginFragment()
+            findNavController().navigate(action)
+        }
+
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -35,20 +48,16 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
         super.onViewCreated(view, savedInstanceState)
 
 
+
+
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-//        getPosts()
 
 
         setAdapter()
         viewModel.getPostsList()
 
         binding.searchView.setOnQueryTextListener(this)
-
-
-
     }
-
-
 
     private fun setAdapter() {
         postAdapter = PostAdapter()

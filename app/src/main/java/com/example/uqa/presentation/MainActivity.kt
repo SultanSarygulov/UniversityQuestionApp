@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -43,13 +44,19 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController)
         binding.bottomNavigationView.setupWithNavController(navController)
 
-        navController.addOnDestinationChangedListener{_, nd: NavDestination, _ ->
-            if (nd.id == R.id.questionFragment){
-                binding.bottomNavigationView.menu.findItem(R.id.comment).isVisible
-                !binding.bottomNavigationView.menu.findItem(R.id.askQuestionFragment).isVisible
+        navController.addOnDestinationChangedListener{_, destination: NavDestination, _ ->
+            val authorizationFragments = setOf(
+                R.id.loginFragment,
+                R.id.registerFragment,
+                R.id.codeFragment
+            )
+
+            if (destination.id in authorizationFragments) {
+                binding.bottomNavigationView.visibility = View.GONE
+                this.supportActionBar?.hide()
             } else {
-                !binding.bottomNavigationView.menu.findItem(R.id.comment).isVisible
-                binding.bottomNavigationView.menu.findItem(R.id.askQuestionFragment).isVisible
+                binding.bottomNavigationView.visibility = View.VISIBLE
+                this.supportActionBar?.show()
             }
         }
 
@@ -59,10 +66,6 @@ class MainActivity : AppCompatActivity() {
             editor.putBoolean(PREFERENCE_KEY, true)
             editor.apply()
         }
-
-        setPreferences()
-
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -71,39 +74,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-    private fun setPreferences() {
-        val preferences = getSharedPreferences("UQA", Activity.MODE_PRIVATE)
-        val firstTime = preferences?.getBoolean(PREFERENCE_KEY, true)
-        Log.d(TAG, "preferences: ${firstTime}")
-        if (firstTime == true){
-            loadDemoVideos()
-
-            Log.d(TAG, "preferences: I love children")
-            val editor = preferences.edit()
-            editor?.putBoolean(PREFERENCE_KEY, false)
-            editor?.apply()
-
-
-        } else {
-            Log.d(TAG, "preferences: Nah jk")
-        }
-    }
-
-    private fun loadDemoVideos() {
-        val post1 = Post(0, "Where is mr Isaev", "Sultan Sarygulov (Student)", "12/05/2023", 21, 3, false, false)
-        viewModel.addPost(post1)
-        val post2 = Post(1, "Have you seen my id?", "daniil (Student)", "12/05/2023", 12, 1, false, false)
-        viewModel.addPost(post2)
-        val post3 = Post(2, "Where is the Finals schedule", "Andrei (Teacher)", "12/05/2023", 30, 0, false, false)
-        viewModel.addPost(post3)
-        val post4 = Post(3, "Recommend a nice restaurant near the university", "Muntaha", "12/05/2023", 0, 99, false, false)
-        viewModel.addPost(post4)
-
-    }
-
     companion object{
         val TAG = "Chura"
-        val PREFERENCE_KEY = "First time9"
+        val PREFERENCE_KEY = "First time12"
     }
 }
