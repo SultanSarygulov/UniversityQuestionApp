@@ -1,5 +1,7 @@
 package com.example.uqa.presentation.askQuestion
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +14,7 @@ import com.example.uqa.R
 import com.example.uqa.data.Post
 import com.example.uqa.databinding.FragmentAskQuestionBinding
 import com.example.uqa.databinding.FragmentQuestionBinding
+import com.example.uqa.presentation.MainActivity.Companion.USERNAME
 import com.example.uqa.presentation.home.HomeViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -20,12 +23,15 @@ import java.util.*
 class AskQuestionFragment : Fragment() {
 
     private lateinit var binding: FragmentAskQuestionBinding
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var viewModel: AskQuestionViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
         binding = FragmentAskQuestionBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,9 +47,8 @@ class AskQuestionFragment : Fragment() {
     }
 
     private fun checkInputs() {
-        if (
-            binding.inputPostTextET.text.toString().isEmpty() ||
-            binding.inputName.text.toString().isEmpty()){
+        if (binding.inputPostTextET.text.toString().isEmpty()){
+
             Toast.makeText(requireContext(), "Fill out all boxes!", Toast.LENGTH_SHORT).show()
             return
         }
@@ -55,7 +60,7 @@ class AskQuestionFragment : Fragment() {
         val newPost = Post(
             0,
             binding.inputPostTextET.text.toString(),
-            binding.inputName.text.toString(),
+            sharedPreferences.getString(USERNAME, "error") ?: "error",
             getDate(),
             0,
             0,

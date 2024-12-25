@@ -3,129 +3,124 @@ package com.example.uqa.presentation.question
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.uqa.R
 import com.example.uqa.data.Answer
 import com.example.uqa.databinding.ItemAnswerBinding
 import com.example.uqa.presentation.MainActivity.Companion.TAG
 
-class AnswerAdapter: ListAdapter<Answer, AnswerAdapter.AnswerViewHolder>(AnswerDiffUtil()) {
+class AnswerAdapter : ListAdapter<Answer, AnswerAdapter.AnswerViewHolder>(AnswerDiffUtil()) {
 
     var onPostClickListener: ((Answer) -> Unit)? = null
+    private val repliesMap = mutableMapOf<Long, List<Answer>>() // Map of parent answer ID to its replies
 
-    private var repliesList = mutableListOf<Answer>()
-    fun setRepliesList(replies: List<Answer>){
-        val diffCallback = ReplyDiffUtil(oldList = repliesList, newList = replies)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        repliesList.clear()
-        repliesList.addAll(replies)
-        diffResult.dispatchUpdatesTo(this)
+    fun updateRepliesList(replies: List<Answer>) {
+        repliesMap.clear()
+        replies.groupBy { it.replyId }.forEach { (key, value) ->
+            if (key != null) repliesMap[key] = value
+        }
+        notifyDataSetChanged()
     }
 
-
     class AnswerViewHolder(
-        item: View,
-        private val repliesList: List<Answer>,
+        private val binding: ItemAnswerBinding,
         private val onPostClickListener: ((Answer) -> Unit)?
-    ): RecyclerView.ViewHolder(item){
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-        private val binding = ItemAnswerBinding.bind(item)
+        private val replyAdapter = ReplyAdapter()
 
-        fun bind(answer: Answer) = with(binding){
-            binding.answerText.text = answer.text
-            binding.answerAuthor.text = answer.author
+        fun bind(answer: Answer, replies: List<Answer>?) {
+            binding.apply {
+                answerText.text = answer.text
+                answerAuthor.text = answer.author
+                answerUpvotes.text = answer.upvotes.toString()
+                answerDownvotes.text = answer.downvotes.toString()
 
-            val repliesListLiveData= MutableLiveData<List<Answer>> ()
-            repliesListLiveData.postValue(repliesList)
+                // Set up replies RecyclerView
+                replyList.adapter = replyAdapter
+                replyAdapter.submitList(replies ?: emptyList())
 
-            val replyAdapter = AnswerAdapter()
-            binding.replyList.adapter = replyAdapter
-            repliesListLiveData.observe(itemView.context as LifecycleOwner){ list ->
-                replyAdapter.submitList(list.filter { it.replyId == answer.id })
-            }
-
-
-
-            binding.replyButton.setOnClickListener {
-                onPostClickListener?.invoke(answer)
-            }
-
-            binding.answerUpvotes.text = answer.upvotes.toString()
-
-            binding.answerDownvotes.text = answer.downvotes.toString()
-
-            binding.answerUpvoteButton.setOnClickListener {
-                answer.isUpvoted = !answer.isUpvoted
-
-                if (answer.isUpvoted) {
-                    answer.upvotes += 1
-
-                    if (answer.isDownvoted){
-                        answer.isDownvoted = false
-                        answer.downvotes -= 1
-                        binding.answerDownvoteButton.setColorFilter(Color.parseColor("#C74949"))
-                        binding.answerDownvotes.setTextColor(Color.parseColor("#000000"))
-                    }
-
-                    binding.answerUpvoteButton.setColorFilter(Color.parseColor("#7fbaff"))
-                    binding.answerUpvotes.setTextColor(Color.parseColor("#7fbaff"))
-                } else {
-                    answer.upvotes -= 1
-                    binding.answerUpvoteButton.setColorFilter(Color.parseColor("#4983C7"))
-                    binding.answerUpvotes.setTextColor(Color.parseColor("#000000"))
+                // Handle reply button click
+                replyButton.setOnClickListener {
+                    onPostClickListener?.invoke(answer)
                 }
 
-                binding.answerUpvotes.text = answer.upvotes.toString()
-                binding.answerDownvotes.text = answer.downvotes.toString()
+                // Handle upvote and downvote button clicks
+                answerUpvoteButton.setOnClickListener { toggleUpvote(answer) }
+                answerDownvoteButton.setOnClickListener { toggleDownvote(answer) }
+
+                // Update UI based on vote status
+                updateVoteUI(answer)
             }
+        }
 
-            binding.answerDownvoteButton.setOnClickListener {
-                answer.isDownvoted = !answer.isDownvoted
-
+        private fun toggleUpvote(answer: Answer) {
+            answer.isUpvoted = !answer.isUpvoted
+            if (answer.isUpvoted) {
+                answer.upvotes++
                 if (answer.isDownvoted) {
-                    answer.downvotes += 1
-
-                    if (answer.isUpvoted){
-                        answer.isUpvoted = false
-                        answer.upvotes -= 1
-                        binding.answerUpvoteButton.setColorFilter(Color.parseColor("#4983C7"))
-                        binding.answerUpvotes.setTextColor(Color.parseColor("#000000"))
-                    }
-
-                    binding.answerDownvoteButton.setColorFilter(Color.parseColor("#ff8989"))
-                    binding.answerDownvotes.setTextColor(Color.parseColor("#ff8989"))
-                } else {
-                    answer.downvotes -= 1
-                    binding.answerDownvoteButton.setColorFilter(Color.parseColor("#C74949"))
-                    binding.answerDownvotes.setTextColor(Color.parseColor("#000000"))
+                    answer.isDownvoted = false
+                    answer.downvotes--
                 }
+            } else {
+                answer.upvotes--
+            }
+            updateVoteUI(answer)
+        }
 
-                binding.answerUpvotes.text = answer.upvotes.toString()
-                binding.answerDownvotes.text = answer.downvotes.toString()
+        private fun toggleDownvote(answer: Answer) {
+            answer.isDownvoted = !answer.isDownvoted
+            if (answer.isDownvoted) {
+                answer.downvotes++
+                if (answer.isUpvoted) {
+                    answer.isUpvoted = false
+                    answer.upvotes--
+                }
+            } else {
+                answer.downvotes--
+            }
+            updateVoteUI(answer)
+        }
+
+        private fun updateVoteUI(answer: Answer) {
+            binding.apply {
+                // Upvote UI
+                answerUpvoteButton.setColorFilter(
+                    if (answer.isUpvoted) Color.parseColor("#7fbaff") else Color.parseColor("#4983C7")
+                )
+                answerUpvotes.setTextColor(
+                    if (answer.isUpvoted) Color.parseColor("#7fbaff") else Color.BLACK
+                )
+
+                // Downvote UI
+                answerDownvoteButton.setColorFilter(
+                    if (answer.isDownvoted) Color.parseColor("#ff8989") else Color.parseColor("#C74949")
+                )
+                answerDownvotes.setTextColor(
+                    if (answer.isDownvoted) Color.parseColor("#ff8989") else Color.BLACK
+                )
+
+                // Update vote counts
+                answerUpvotes.text = answer.upvotes.toString()
+                answerDownvotes.text = answer.downvotes.toString()
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnswerViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_answer, parent, false)
-
-        return AnswerViewHolder(view, repliesList, onPostClickListener)
+        val binding = ItemAnswerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return AnswerViewHolder(binding, onPostClickListener)
     }
 
     override fun onBindViewHolder(holder: AnswerViewHolder, position: Int) {
         val item = getItem(position)
-        Log.d(TAG, "onBindViewHolder: ${item}")
-        holder.bind(item)
-
+        val replies = repliesMap[item.id] // Get replies for the current answer
+        holder.bind(item, replies)
     }
 
-    class AnswerDiffUtil: DiffUtil.ItemCallback<Answer>(){
+    class AnswerDiffUtil : DiffUtil.ItemCallback<Answer>() {
         override fun areItemsTheSame(oldItem: Answer, newItem: Answer): Boolean {
             return oldItem.id == newItem.id
         }
@@ -133,25 +128,28 @@ class AnswerAdapter: ListAdapter<Answer, AnswerAdapter.AnswerViewHolder>(AnswerD
         override fun areContentsTheSame(oldItem: Answer, newItem: Answer): Boolean {
             return oldItem == newItem
         }
+    }
+}
 
+class ReplyAdapter : ListAdapter<Answer, ReplyAdapter.ReplyViewHolder>(AnswerAdapter.AnswerDiffUtil()) {
+
+    class ReplyViewHolder(private val binding: ItemAnswerBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(reply: Answer) {
+            binding.apply {
+                answerText.text = reply.text
+                answerAuthor.text = reply.author
+                answerUpvotes.text = reply.upvotes.toString()
+                answerDownvotes.text = reply.downvotes.toString()
+            }
+        }
     }
 
-    class ReplyDiffUtil(
-        private val oldList: List<Answer>,
-        private val newList: List<Answer>
-        ): DiffUtil.Callback(){
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReplyViewHolder {
+        val binding = ItemAnswerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ReplyViewHolder(binding)
+    }
 
-        override fun getOldListSize(): Int = oldList.size
-
-        override fun getNewListSize(): Int = newList.size
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition].id == newList[newItemPosition].id
-        }
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition] == newList[newItemPosition]
-        }
-
+    override fun onBindViewHolder(holder: ReplyViewHolder, position: Int) {
+        holder.bind(getItem(position))
     }
 }

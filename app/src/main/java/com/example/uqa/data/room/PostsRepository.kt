@@ -13,6 +13,10 @@ class PostsRepository(private val postsDao: PostsDao) {
         return postsDao.getPosts()
     }
 
+    suspend fun getPostsByAuthor(author: String): List<Post>{
+        return postsDao.getPostsByAuthor(author)
+    }
+
     suspend fun addPosts(post: Post){
         postsDao.addPost(post)
     }

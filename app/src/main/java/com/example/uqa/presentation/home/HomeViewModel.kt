@@ -38,9 +38,4 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
         repository = PostsRepository(postsDao)
     }
 
-
-
-
-
-
 }

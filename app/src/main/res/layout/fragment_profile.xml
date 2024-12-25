@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userPictrure"
+        app:layout_constraintTop_toBottomOf="@+id/userPictrureFrame"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <EditText
@@ -41,16 +41,26 @@
         app:layout_constraintTop_toBottomOf="@+id/userName"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <ImageView
-        android:id="@+id/userPictrure"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/userPictrureFrame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="30dp"
         android:layout_marginTop="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/userPictrure"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:background="#D6D6D6"
+            app:srcCompat="@drawable/ic_person"
+            tools:src="@tools:sample/avatars" />
+
+    </androidx.cardview.widget.CardView>
+
 
     <Button
         android:id="@+id/logOutButton"
@@ -62,4 +72,27 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myQuestionsList"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/MyQuestionsText"
+        tools:listitem="@layout/item_post"/>
+
+    <TextView
+        android:id="@+id/MyQuestionsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="sans-serif-black"
+        android:text="My questions:"
+        android:textColor="@color/mainBlue"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/userEmail"
+        app:layout_constraintTop_toBottomOf="@+id/userEmail" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,30 +19,15 @@
         android:inputType="text"
         android:padding="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/inputAnswerAuthor"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:gravity="start"
-        android:hint="Name"
-        android:background="@drawable/shape_cornered_button"
-        android:inputType="textPersonName"
-        android:padding="15dp"
-        app:layout_constraintEnd_toEndOf="@+id/inputAnswer"
-        app:layout_constraintStart_toStartOf="@+id/inputAnswer"
-        app:layout_constraintTop_toBottomOf="@+id/inputAnswer" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/answerButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/shape_cornered_button"
         android:backgroundTint="@color/mainBlue"
@@ -53,7 +38,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/inputAnswer"
         app:layout_constraintStart_toStartOf="@+id/inputAnswer"
-        app:layout_constraintTop_toBottomOf="@+id/inputAnswerAuthor" />
+        app:layout_constraintTop_toBottomOf="@+id/inputAnswer" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

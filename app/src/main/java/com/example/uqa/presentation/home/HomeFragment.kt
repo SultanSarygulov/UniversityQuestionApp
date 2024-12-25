@@ -48,8 +48,6 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
 
