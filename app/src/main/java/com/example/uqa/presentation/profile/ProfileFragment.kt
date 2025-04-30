@@ -41,7 +41,7 @@ class ProfileFragment : Fragment() {
 
         val username = sharedPreferences.getString(USERNAME, "error").toString()
         binding.userName.setText(username)
-        binding.userPictrure.setImageResource(R.drawable.ic_person)
+//        binding.userPictrure.setImageResource(R.drawable.ic_person)
 
         binding.logOutButton.setOnClickListener {
 

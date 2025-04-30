@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userPictrureFrame"
+        app:layout_constraintTop_toBottomOf="@+id/userPictrure"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <EditText
@@ -39,27 +39,20 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userName"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        android:visibility="invisible"/>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/userPictrureFrame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="30dp"
+
+    <ImageView
+        android:id="@+id/userPictrure"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        app:srcCompat="@android:drawable/sym_def_app_icon"
         android:layout_marginTop="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <ImageView
-            android:id="@+id/userPictrure"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:background="#D6D6D6"
-            app:srcCompat="@drawable/ic_person"
-            tools:src="@tools:sample/avatars" />
-
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toTopOf="parent"/>
 
 
     <Button

@@ -15,6 +15,7 @@
         android:text="Resend code in 00:59"
         android:textColor="#4983C7"
         android:textSize="20dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/inputCode"
         app:layout_constraintEnd_toEndOf="@+id/inputCode"
         app:layout_constraintStart_toStartOf="@+id/inputCode" />
